@@ -3,9 +3,9 @@ module.exports = (sequelize, Sequelize) => {
       "emergency_contact",
       {
         emergency_id: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.STRING,
           primaryKey: true,     // Set emergency_id as the primary key
-          autoIncrement: true,  // Auto-increment for primary key
+          autoIncrement: false,  // Auto-increment for primary key
         },
         emergency_name: {
           type: Sequelize.STRING,
@@ -20,7 +20,7 @@ module.exports = (sequelize, Sequelize) => {
           allowNull: false,
         },
         user_id: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.STRING,
           allowNull: false,
           references: {
             model: 'users',     // References the 'users' table

@@ -11,12 +11,16 @@ module.exports = (sequelize, Sequelize) => {
           type: Sequelize.TEXT,
           allowNull: false,     // Optional: Prevents null values
         },
-        journal_class_id: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-        },
         created_date: {
           type: Sequelize.DATE,
+          defaultValue: Sequelize.NOW,
+        },
+        user_id: {
+          type: Sequelize.STRING,
+          defaultValue: Sequelize.NOW,
+        },
+        question: {
+          type: Sequelize.STRING,
           defaultValue: Sequelize.NOW,
         },
       },

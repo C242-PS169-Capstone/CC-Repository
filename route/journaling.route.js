@@ -24,7 +24,6 @@ app.put('/journals/:id', controller.updateJournaling);
 // Route to delete a journal by ID
 app.delete('/journals/:id', controller.deleteJournaling);
 
-//   app.get("/users/:id", [authJwt.verifyToken, authJwt.isAdmin], controller.getUserById);
-//   app.put("/users/:id", [authJwt.verifyToken, authJwt.isAdmin], controller.updateUser);
-//   app.delete("/users/:id", [authJwt.verifyToken, authJwt.isAdmin], controller.deleteUser);
+app.get("/journaling/user/:user_id", controller.getAllJournalingByUserId);
+
 };

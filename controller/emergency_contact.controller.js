@@ -34,16 +34,17 @@ exports.getEmergencyContactById = async (req, res) => {
 // Create a new emergency contact
 exports.createEmergencyContact = async (req, res) => {
   try {
-    const { emergency_name, emergency_number, relationship, user_id } = req.body;
+    const { emergency_id, emergency_name, emergency_number, relationship, user_id } = req.body;
 
     // Validate required fields
-    if (!emergency_name || !emergency_number || !relationship || !user_id) {
+    if (!emergency_id ||!emergency_name || !emergency_number || !relationship || !user_id) {
       return res
         .status(400)
         .send(new Response(false, 400, "All fields are required"));
     }
 
     const newContact = await EmergencyContact.create({
+      emergency_id,
       emergency_name,
       emergency_number,
       relationship,

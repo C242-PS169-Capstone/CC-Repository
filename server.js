@@ -1,30 +1,29 @@
 const express = require('express');
-const mysql = require('mysql2'); // using mysql2, as you already installed 
 const bodyParser = require('body-parser');
-const db = require("./model");
+require('dotenv').config(); // Load environment variables
+
+// Load the raw MySQL pool
+const db = require('./model'); // This is the MySQL pool-based implementation
 
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8081; // Use PORT from .env if available
 
+// Middleware
 app.use(express.json());
-
-// set body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-require('./route/journaling.route')(app);
-require('./route/emergency_contact.route')(app);
-require('./route/hotline_contact.route')(app);
-require('./route/journaling_class.route')(app);
-require('./route/users.route')(app);
-
-db.sequelize.sync();
-
-// Your API routes here
+// Default route
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+// Load routes and pass the `db` object to them
+require('./route/journaling.route')(app, db);
+require('./route/emergency_contact.route')(app, db);
+require('./route/users.route')(app, db);
+
+// Start server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

@@ -28,19 +28,18 @@ exports.getUserById = async (req, res) => {
 // Create a new user
 exports.createUser = async (req, res) => {
     try {
-        const { username, wa_number, email, password, is_active } = req.body;
+        const {user_id, username, email, password} = req.body;
 
         // Validate required fields
-        if (!username || !wa_number || !email || !password) {
+        if (!user_id || !username || !email || !password) {
             return res.status(400).send(new Response(false, 400, "All fields are required"));
         }
 
         const newUser = await User.create({
+            user_id,
             username,
-            wa_number,
             email,
-            password,
-            is_active: is_active || true, // Default to active if not provided
+            password
         });
 
         res.status(201).send(new Response(true, 201, "User created successfully", newUser));
@@ -52,7 +51,7 @@ exports.createUser = async (req, res) => {
 // Update a user by ID
 exports.updateUser = async (req, res) => {
     try {
-        const { username, wa_number, email, password, is_active } = req.body;
+        const { username, email, password } = req.body;
 
         const user = await User.findByPk(req.params.id);
         if (!user) {
@@ -62,10 +61,8 @@ exports.updateUser = async (req, res) => {
         // Update the user
         await user.update({
             username: username || user.username,
-            wa_number: wa_number || user.wa_number,
             email: email || user.email,
             password: password || user.password,
-            is_active: is_active !== undefined ? is_active : user.is_active, // Only update if provided
         });
 
         res.status(200).send(new Response(true, 200, "User updated successfully", user));

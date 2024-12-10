@@ -8,9 +8,37 @@ exports.getAllJournaling = async (req, res) => {
     res
       .status(200)
       .send(
-        new Response(true, 200, "journaling retrieved successfully", journaling)
+        new Response(true, 200, "Journaling retrieved successfully", journaling)
       );
   } catch (error) {
+    res.status(500).send(new Response(false, 500, error.message));
+  }
+};
+
+exports.getAllJournalingByUserId = async (req, res) => {
+  try {
+    const userId = req.params.user_id; // Ambil user_id dari parameter URL
+
+    // Cari semua jurnal yang memiliki user_id yang sesuai
+    const journaling = await Journaling.findAll({
+      where: { user_id: userId }, // Menyaring berdasarkan user_id
+    });
+
+    // Jika tidak ada jurnal ditemukan
+    if (journaling.length === 0) {
+      return res
+        .status(404)
+        .send(new Response(false, 404, "No journaling found for this user"));
+    }
+
+    // Kirimkan response sukses dengan data jurnal
+    res
+      .status(200)
+      .send(
+        new Response(true, 200, "Journals retrieved successfully", journaling)
+      );
+  } catch (error) {
+    // Tangani error jika terjadi
     res.status(500).send(new Response(false, 500, error.message));
   }
 };
@@ -18,14 +46,14 @@ exports.getAllJournaling = async (req, res) => {
 exports.createJournaling = async (req, res) => {
   try {
     // Extract data from request body
-    const { journal_id, content, journal_class_id, created_date } = req.body;
+    const { journal_id, content, created_date, user_id, question } = req.body;
 
     // Validate required fields
-    if (!content || !journal_class_id) {
+    if (!content || !journal_class_id || !user_id|| !question) {
       return res
         .status(400)
         .send(
-          new Response(false, 400, "Content and journal_class_id are required")
+          new Response(false, 400, "Content, journal_class_id, question, and user_id are required")
         );
     }
 
@@ -33,8 +61,9 @@ exports.createJournaling = async (req, res) => {
     const newJournaling = await Journaling.create({
       journal_id, // Optional if auto-increment
       content,
-      journal_class_id,
+      question,
       created_date: created_date || new Date(), // Use provided date or current date
+      user_id, // Ensure user_id is provided for the journaling entry
     });
 
     // Send success response
@@ -89,7 +118,6 @@ exports.updateJournaling = async (req, res) => {
     // Update the journal entry
     await journaling.update({
       content: content || journaling.content,
-      journal_class_id: journal_class_id || journaling.journal_class_id,
       created_date: created_date || journaling.created_date,
     });
 
@@ -122,51 +150,3 @@ exports.deleteJournaling = async (req, res) => {
     res.status(500).send(new Response(false, 500, error.message));
   }
 };
-
-// exports.getUserById = async (req, res) => {
-//   try {
-//     const user = await User.findByPk(req.params.id);
-//     if (!user) {
-//       return res.status(404).send(new Response(false, 404, "User not found"));
-//     }
-//     res.status(200).send(new Response(true, 200, "User retrieved successfully", user));
-//   } catch (error) {
-//     res.status(500).send(new Response(false, 500, error.message));
-//   }
-// };
-
-// exports.updateUser = async (req, res) => {
-//   try {
-//     const { username, email, password } = req.body;
-//     const hashedPassword = bcrypt.hashSync(password, 8);
-
-//     const user = await User.findByPk(req.params.id);
-//     if (!user) {
-//       return res.status(404).send(new Response(false, 404, "User not found"));
-//     }
-
-//     await user.update({
-//       username,
-//       email,
-//       password: hashedPassword,
-//     });
-
-//     res.status(200).send(new Response(true, 200, "User updated successfully", user));
-//   } catch (error) {
-//     res.status(500).send(new Response(false, 500, error.message));
-//   }
-// };
-
-// exports.deleteUser = async (req, res) => {
-//   try {
-//     const user = await User.findByPk(req.params.id);
-//     if (!user) {
-//       return res.status(404).send(new Response(false, 404, "User not found"));
-//     }
-
-//     await user.destroy();
-//     res.status(200).send(new Response(true, 200, "User deleted successfully"));
-//   } catch (error) {
-//     res.status(500).send(new Response(false, 500, error.message));
-//   }
-// };
