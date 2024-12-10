@@ -31,12 +31,12 @@ module.exports = (sequelize, Sequelize) => {
     );
   
     // Define association with the journaling_class model
-    Journaling.associate = (models) => {
-      Journaling.belongsTo(models.journaling_class, {
-        foreignKey: "journal_class_id",
-        as: "journal_class", // Alias for the relation
-      });
-    };
+    // Journaling.associate = (models) => {
+    //   Journaling.belongsTo(models.journaling_class, {
+    //     foreignKey: "journal_class_id",
+    //     as: "journal_class", // Alias for the relation
+    //   });
+    // };
   
     return Journaling;
   };

@@ -49,11 +49,11 @@ exports.createJournaling = async (req, res) => {
     const { journal_id, content, created_date, user_id, question } = req.body;
 
     // Validate required fields
-    if (!content || !journal_class_id || !user_id|| !question) {
+    if (!content || !user_id|| !question) {
       return res
         .status(400)
         .send(
-          new Response(false, 400, "Content, journal_class_id, question, and user_id are required")
+          new Response(false, 400, "Content, question, and user_id are required")
         );
     }
 

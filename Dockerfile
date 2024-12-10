@@ -1,20 +1,21 @@
-# Gunakan image dasar Node.js
+# Use the official Node.js 18 image as a base
 FROM node:18
 
-# Atur direktori kerja di dalam container
+# Set the working directory
 WORKDIR /usr/src/app
 
-# Salin file package.json dan package-lock.json ke dalam container
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --production
 
-# Salin semua file proyek ke dalam container
+# Copy the rest of the application code
 COPY . .
 
-# Expose port yang digunakan aplikasi (sesuaikan dengan port API Anda)
-EXPOSE 8080
+# Expose the port the app runs on
+EXPOSE 8081
 
-# Jalankan aplikasi
-CMD ["npm", "start"]
+# Define the command to start the application
+CMD ["node", "server.js"]
+

@@ -14,8 +14,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Default route
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+app.get("/", (req, res) => {
+  res.json({ status: "Hearhere is finally here" });
 });
 
 // Load routes and pass the `db` object to them
@@ -25,5 +25,6 @@ require('./route/users.route')(app, db);
 
 // Start server
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Hearhere REST API is running on port ${port}`);
 });
+
